@@ -36,8 +36,13 @@
     @apply no-underline transition-colors duration-200;
   }
 
+  /* 🔥 IMAGE OPTIMIZATION - Lazy Load + Fast Render */
   img {
     @apply max-w-full;
+    content-visibility: auto;
+    loading: lazy;
+    decoding: async;
+    transition: opacity 0.3s ease;
   }
 
   input, textarea, select {
@@ -408,7 +413,7 @@
   .status-rejected { @apply bg-red-50 text-red-700; }
   .status-cancelled { @apply bg-red-50 text-red-600; }
 
-  /* ── Premium Text Colors (READABLE) ── */
+  /* ── Premium Text Colors ── */
   .text-primary-brand {
     @apply text-primary-700 font-semibold;
   }
@@ -429,7 +434,7 @@
     @apply text-secondary-500;
   }
 
-  /* ── Premium Backgrounds (READABLE) ── */
+  /* ── Premium Backgrounds ── */
   .bg-premium-light {
     @apply bg-gradient-to-br from-white via-primary-50/30 to-accent-50/20;
   }
@@ -477,11 +482,6 @@ body {
 /* Focus visible */
 *:focus-visible {
   @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-white;
-}
-
-/* Smooth image loading */
-img {
-  transition: opacity 0.3s ease;
 }
 
 /* Premium link underline */
@@ -534,5 +534,164 @@ a.premium-link:hover::after {
 @media print {
   body {
     background: white !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   📱 MOBILE OPTIMIZATION - Image Loading
+   ══════════════════════════════════════════════════ */
+
+/* Image placeholder while loading */
+img {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  min-height: 50px;
+}
+
+/* Image loaded state */
+img[src] {
+  background: transparent;
+}
+
+/* Mobile specific optimizations */
+@media (max-width: 768px) {
+  /* Faster image rendering on mobile */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimizeSpeed;
+    will-change: auto;
+  }
+
+  /* Smaller image containers */
+  .h-52 {
+    height: 11rem !important;
+  }
+
+  .h-48 {
+    height: 10rem !important;
+  }
+
+  /* Reduce spacing on mobile */
+  .section {
+    @apply py-10 !important;
+  }
+
+  .container-app {
+    @apply px-3 !important;
+  }
+
+  /* Smaller cards on mobile */
+  .card {
+    @apply rounded-xl;
+  }
+
+  /* Smaller text on mobile */
+  h1 {
+    @apply text-2xl !important;
+  }
+
+  h2 {
+    @apply text-xl !important;
+  }
+
+  /* Reduce animation on mobile for performance */
+  .animate-blob,
+  .animate-pulse,
+  .animate-float {
+    animation: none !important;
+  }
+
+  /* Hide decorative blobs on mobile */
+  .blur-3xl {
+    display: none !important;
+  }
+
+  /* Faster transitions on mobile */
+  .transition-all {
+    transition-duration: 150ms !important;
+  }
+
+  /* Reduce shadows on mobile */
+  .shadow-xl,
+  .shadow-2xl,
+  .shadow-premium {
+    box-shadow: 0 4px 12px -2px rgba(0,0,0,0.08) !important;
+  }
+
+  /* Reduce backdrop blur on mobile */
+  .backdrop-blur-xl,
+  .backdrop-blur-md {
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+
+  /* Grid fixes for mobile */
+  .grid-cols-2 {
+    @apply grid-cols-1 !important;
+  }
+
+  .sm\:grid-cols-2 {
+    @apply grid-cols-1 !important;
+  }
+
+  /* Font optimization */
+  body {
+    text-rendering: optimizeSpeed;
+  }
+
+  /* Reduce gradient complexity on mobile */
+  .gradient-text {
+    animation: none !important;
+    background-size: 100% auto !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 375px) {
+  html {
+    font-size: 14px;
+  }
+
+  .container-app {
+    @apply px-2 !important;
+  }
+
+  .btn-lg {
+    @apply px-5 py-3 text-base !important;
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .h-52 {
+    height: 13rem !important;
+  }
+
+  img {
+    image-rendering: auto;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   🖼️ IMAGE LOADING STATES
+   ══════════════════════════════════════════════════ */
+
+/* Skeleton loading effect for images */
+img:not([src]),
+img[src=""] {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Smooth fade in when image loads */
+img {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+
+/* Network-aware optimization */
+@media (prefers-reduced-data: reduce) {
+  img {
+    image-rendering: pixelated;
   }
 }
